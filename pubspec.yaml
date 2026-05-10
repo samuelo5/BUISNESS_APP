@@ -1,0 +1,64 @@
+name: business_assistant
+description: AI-Powered Business Assistant for small businesses and entrepreneurs.
+publish_to: 'none'
+version: 1.0.0+1
+
+environment:
+  sdk: '>=3.0.0 <4.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  # UI & Icons
+  cupertino_icons: ^1.0.8
+  google_fonts: ^6.2.1
+  flutter_animate: ^4.5.0
+  fl_chart: ^0.69.0
+
+  # State Management
+  provider: ^6.1.2
+
+  # Storage
+  shared_preferences: ^2.3.2
+
+  # Environment Variables
+  flutter_dotenv: ^5.1.0
+
+  # AI & Cloud
+  google_generative_ai: ^0.4.4
+  firebase_core: ^3.1.1
+  firebase_auth: ^5.1.1
+  google_sign_in: ^6.2.1
+  sign_in_with_apple: ^6.1.1
+  font_awesome_flutter: ^10.7.0
+
+
+  # Utils
+  intl: ^0.19.0
+  pdf: ^3.11.1
+  printing: ^5.13.2
+
+
+  uuid: ^4.4.2
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^4.0.0
+  flutter_launcher_icons: ^0.13.1
+
+
+flutter:
+  uses-material-design: true
+  
+  assets:
+    - .env
+    - assets/
+
+flutter_launcher_icons:
+  android: true
+  ios: true
+  image_path: "assets/icons/app_icon.png"
+  min_sdk_android: 21 # android >= 5.0
+

@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "64938171005",
+    "project_id": "bizai-53737",
+    "storage_bucket": "bizai-53737.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:64938171005:android:d2a240a747347d8b3cef14",
+        "android_client_info": {
+          "package_name": "com.bizassist.business_assistant"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA6Pi13_BwQyk72q00dR1eq1aiL-cil45A"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
