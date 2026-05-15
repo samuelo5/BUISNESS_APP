@@ -3,6 +3,7 @@ import 'package:flutter_animate/flutter_animate.dart';
 import 'package:provider/provider.dart';
 import 'package:business_assistant/core/theme/app_theme.dart';
 import 'package:business_assistant/providers/app_provider.dart';
+import 'package:business_assistant/features/subscription/screens/paystack_payment_screen.dart';
 
 class SubscriptionScreen extends StatefulWidget {
   const SubscriptionScreen({super.key});
@@ -129,22 +130,22 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
             ),
             const SizedBox(width: 8),
             Text(
-              'Choose Your Plan',
+              'Pricing Plans',
               style: TextStyle(
                   color: Theme.of(context).brightness == Brightness.dark ? Colors.white : AppColors.textDark,
-                  fontSize: 26,
-                  fontWeight: FontWeight.w800),
+                  fontSize: 24,
+                  fontWeight: FontWeight.w700),
             ),
           ],
         ),
         const SizedBox(height: 8),
         const Text(
-          'Unlock the full power of AI for your business',
+          'Choose the perfect plan for your business',
           style:
-              TextStyle(color: AppColors.textSecondary, fontSize: 15, height: 1.5),
+              TextStyle(color: AppColors.textSecondary, fontSize: 14, height: 1.5),
         ),
       ],
-    ).animate().fadeIn(duration: 400.ms);
+    );
   }
 
   Widget _buildPlanTabs(BuildContext context) {
@@ -152,7 +153,7 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
       padding: const EdgeInsets.all(4),
       decoration: BoxDecoration(
         color: Theme.of(context).cardTheme.color,
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(12),
         border: Border.all(
           color: Theme.of(context).brightness == Brightness.dark 
               ? AppColors.darkBorder 
@@ -166,13 +167,11 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
             child: GestureDetector(
               onTap: () => setState(() => _selectedPlan = plan.name),
               child: AnimatedContainer(
-                duration: 200.ms,
-                padding: const EdgeInsets.symmetric(vertical: 10),
+                duration: const Duration(milliseconds: 200),
+                padding: const EdgeInsets.symmetric(vertical: 12),
                 decoration: BoxDecoration(
-                  gradient: selected
-                      ? LinearGradient(colors: plan.gradient)
-                      : null,
-                  borderRadius: BorderRadius.circular(12),
+                  color: selected ? AppColors.primary : Colors.transparent,
+                  borderRadius: BorderRadius.circular(10),
                 ),
                 child: Center(
                   child: Column(
@@ -181,10 +180,10 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
                         plan.name,
                         style: TextStyle(
                           color: selected 
-                              ? (plan.name == 'Free' && Theme.of(context).brightness != Brightness.dark ? AppColors.textDark : Colors.white)
+                              ? Colors.white
                               : AppColors.textMuted,
-                          fontWeight: FontWeight.w700,
-                          fontSize: 14,
+                          fontWeight: FontWeight.w600,
+                          fontSize: 13,
                         ),
                       ),
                       Text(
@@ -193,9 +192,10 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
                             : '\$${plan.price}/mo',
                         style: TextStyle(
                           color: selected
-                              ? (plan.name == 'Free' && Theme.of(context).brightness != Brightness.dark ? AppColors.textDark.withValues(alpha: 0.8) : Colors.white.withValues(alpha: 0.8))
+                              ? Colors.white.withValues(alpha: 0.85)
                               : AppColors.textMuted,
                           fontSize: 11,
+                          fontWeight: FontWeight.w500,
                         ),
                       ),
                     ],
@@ -206,7 +206,7 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
           );
         }).toList(),
       ),
-    ).animate().fadeIn(duration: 400.ms, delay: 100.ms);
+    );
   }
 
   _Plan _currentPlan(BuildContext context) =>
@@ -219,18 +219,13 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
     return Container(
       padding: const EdgeInsets.all(24),
       decoration: BoxDecoration(
-        color: plan.name == 'Free' ? Theme.of(context).cardTheme.color : null,
-        gradient: plan.name == 'Free' ? null : LinearGradient(
-          colors: plan.gradient.map((c) => c.withValues(alpha: 0.15)).toList(),
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-        ),
-        borderRadius: BorderRadius.circular(24),
+        color: Theme.of(context).cardTheme.color,
+        borderRadius: BorderRadius.circular(16),
         border: Border.all(
           color: plan.name == 'Free' 
             ? (isDark ? AppColors.darkBorder : AppColors.lightBorder)
-            : plan.color.withValues(alpha: 0.4), 
-          width: 1.5,
+            : AppColors.primary, 
+          width: plan.name == 'Free' ? 1 : 2,
         ),
       ),
       child: Column(
@@ -240,18 +235,17 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
             Container(
               margin: const EdgeInsets.only(bottom: 12),
               padding:
-                  const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+                  const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
               decoration: BoxDecoration(
-                color: plan.color.withValues(alpha: 0.2),
-                borderRadius: BorderRadius.circular(20),
-                border: Border.all(color: plan.color.withValues(alpha: 0.5)),
+                color: AppColors.primary.withValues(alpha: 0.1),
+                borderRadius: BorderRadius.circular(8),
               ),
               child: Text(
                 plan.badge!,
-                style: TextStyle(
-                  color: plan.color,
+                style: const TextStyle(
+                  color: AppColors.primary,
                   fontSize: 12,
-                  fontWeight: FontWeight.w700,
+                  fontWeight: FontWeight.w600,
                 ),
               ),
             ),
@@ -262,33 +256,33 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
                 plan.price == 0 ? 'Free' : '\$${plan.price}',
                 style: TextStyle(
                   color: isDark ? Colors.white : AppColors.textDark,
-                  fontSize: 48,
-                  fontWeight: FontWeight.w900,
+                  fontSize: 40,
+                  fontWeight: FontWeight.w700,
                   height: 1,
                 ),
               ),
               if (plan.price > 0)
                 const Padding(
-                  padding: EdgeInsets.only(bottom: 6, left: 4),
+                  padding: EdgeInsets.only(bottom: 4, left: 6),
                   child: Text('/month',
                       style: TextStyle(
-                          color: AppColors.textSecondary, fontSize: 16)),
+                          color: AppColors.textSecondary, fontSize: 14)),
                 ),
             ],
           ),
-          const SizedBox(height: 6),
+          const SizedBox(height: 8),
           Text(
             plan.name == 'Free'
                 ? 'Get started with essential tools'
                 : plan.name == 'Pro'
-                    ? 'Full AI power for growing businesses'
-                    : 'Enterprise-grade tools for serious businesses',
+                    ? 'For growing businesses'
+                    : 'For scaling enterprises',
             style: const TextStyle(
-                color: AppColors.textSecondary, fontSize: 14, height: 1.4),
+                color: AppColors.textSecondary, fontSize: 13, height: 1.4),
           ),
         ],
       ),
-    ).animate(key: ValueKey(_selectedPlan)).fadeIn(duration: 300.ms);
+    );
   }
 
   Widget _buildFeatureList(BuildContext context) {
@@ -368,59 +362,127 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
         onPressed: plan.name == 'Free'
             ? null
             : () async {
-                await provider.setSubscriptionPlan(plan.name);
-                if (context.mounted) {
-                  Navigator.pop(context);
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      content: Text(
-                          '🎉 Welcome to ${plan.name}! Enjoy unlimited access.'),
-                      backgroundColor: AppColors.success,
-                      behavior: SnackBarBehavior.floating,
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12)),
-                    ),
-                  );
-                }
+                // Show payment method dialog or proceed with Paystack
+                _showPaymentDialog(context, plan.name, plan.price);
               },
         style: ElevatedButton.styleFrom(
-          backgroundColor: Colors.transparent,
-          shadowColor: Colors.transparent,
+          backgroundColor: plan.name == 'Free' ? AppColors.textMuted.withValues(alpha: 0.3) : AppColors.primary,
+          foregroundColor: Colors.white,
+          disabledForegroundColor: AppColors.textMuted,
+          elevation: 0,
           padding: EdgeInsets.zero,
-          shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(18)),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
         ),
-        child: Ink(
-          decoration: BoxDecoration(
-            gradient: LinearGradient(colors: plan.gradient),
-            borderRadius: BorderRadius.circular(18),
-            boxShadow: plan.name != 'Free'
-                ? [
-                    BoxShadow(
-                      color: plan.color.withValues(alpha: 0.4),
-                      blurRadius: 16,
-                      offset: const Offset(0, 6),
-                    ),
-                  ]
-                : null,
-          ),
-          child: Center(
-            child: Text(
-              plan.name == 'Free'
-                  ? 'Current Plan'
-                  : 'Subscribe to ${plan.name} — \$${plan.price}/mo',
-              style: TextStyle(
-                color: plan.name == 'Free' 
-                    ? (isDark ? Colors.white : AppColors.textDark)
-                    : Colors.white,
-                fontSize: 16,
-                fontWeight: FontWeight.w700,
-              ),
+        child: Center(
+          child: Text(
+            plan.name == 'Free'
+                ? 'Current Plan'
+                : 'Subscribe to ${plan.name}',
+            style: const TextStyle(
+              fontSize: 15,
+              fontWeight: FontWeight.w600,
             ),
           ),
         ),
       ),
-    ).animate().fadeIn(duration: 400.ms, delay: 200.ms);
+    );
+  }
+
+  void _showPaymentDialog(BuildContext context, String planName, double price) {
+    final emailController = TextEditingController();
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
+    showDialog(
+      context: context,
+      builder: (dialogContext) => AlertDialog(
+        backgroundColor: isDark ? AppColors.darkCard : AppColors.lightCard,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+        title: Text(
+          'Subscribe to $planName',
+          style: TextStyle(color: isDark ? Colors.white : AppColors.textDark, fontSize: 18, fontWeight: FontWeight.w600),
+        ),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+              '\$${price.toStringAsFixed(2)}/month',
+              style: const TextStyle(
+                color: AppColors.primary,
+                fontSize: 24,
+                fontWeight: FontWeight.w700,
+              ),
+            ),
+            const SizedBox(height: 16),
+            TextField(
+              controller: emailController,
+              keyboardType: TextInputType.emailAddress,
+              style: TextStyle(color: isDark ? Colors.white : AppColors.textDark),
+              decoration: InputDecoration(
+                hintText: 'Enter your email',
+                hintStyle: const TextStyle(color: AppColors.textMuted),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10),
+                  borderSide: BorderSide(
+                    color: isDark ? AppColors.darkBorder : AppColors.lightBorder,
+                  ),
+                ),
+                filled: true,
+                fillColor: isDark ? AppColors.darkSurface : AppColors.lightBg,
+              ),
+            ),
+          ],
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(dialogContext),
+            child: const Text('Cancel', style: TextStyle(color: AppColors.textMuted)),
+          ),
+          ElevatedButton(
+            onPressed: () async {
+              if (emailController.text.isEmpty) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(content: Text('Please enter your email')),
+                );
+                return;
+              }
+
+              Navigator.pop(dialogContext);
+              
+              // Navigate to Paystack payment screen
+              if (context.mounted) {
+                final result = await Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (_) => PaystackPaymentScreen(
+                      plan: planName,
+                      amount: price,
+                      userEmail: emailController.text,
+                    ),
+                  ),
+                );
+
+                if (result == true && context.mounted) {
+                  Navigator.pop(context);
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text(
+                        '🎉 Welcome to ${planName}! Enjoy unlimited access.',
+                      ),
+                      backgroundColor: AppColors.success,
+                      behavior: SnackBarBehavior.floating,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                    ),
+                  );
+                }
+              }
+            },
+            child: const Text('Proceed to Payment'),
+          ),
+        ],
+      ),
+    );
   }
 
   Widget _buildAllPlansComparison() {

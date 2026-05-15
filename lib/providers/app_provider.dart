@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:business_assistant/core/constants/app_constants.dart';
 import 'package:business_assistant/core/services/ai_service.dart';
+import 'package:business_assistant/core/services/paystack_service.dart';
+import 'package:uuid/uuid.dart';
 
 
 class AppProvider extends ChangeNotifier {
@@ -16,6 +18,24 @@ class AppProvider extends ChangeNotifier {
   int _currentTabIndex = 0; // Added for global navigation
   String _dailyTip = ''; // Dynamic AI tip
   final List<Map<String, dynamic>> _invoices = [];
+  
+  // Paystack related variables
+  late PaystackService _paystackService;
+  bool _isProcessingPayment = false;
+  String _paymentError = '';
+  String _userEmail = '';
+
+  AppProvider() {
+    _initializePaystackService();
+  }
+
+  void _initializePaystackService() {
+    try {
+      _paystackService = PaystackService();
+    } catch (e) {
+      _paymentError = 'Failed to initialize Paystack: $e';
+    }
+  }
 
 
 
@@ -30,6 +50,9 @@ class AppProvider extends ChangeNotifier {
   int get currentTabIndex => _currentTabIndex; // Added
   String get dailyTip => _dailyTip; // AI Tip
   List<Map<String, dynamic>> get invoices => _invoices;
+  bool get isProcessingPayment => _isProcessingPayment;
+  String get paymentError => _paymentError;
+  String get userEmail => _userEmail;
 
 
 
@@ -172,6 +195,94 @@ class AppProvider extends ChangeNotifier {
       businessName: _businessName,
       businessType: _businessType,
     );
+    notifyListeners();
+  }
+
+  // --- PAYSTACK PAYMENT METHODS ---
+
+  /// Initialize Paystack payment for subscription
+  Future<Map<String, dynamic>> initializePaystackPayment({
+    required String email,
+    required String plan,
+  }) async {
+    _isProcessingPayment = true;
+    _paymentError = '';
+    _userEmail = email;
+    notifyListeners();
+
+    try {
+      final amount = PaystackService.getAmountForPlan(plan);
+      final reference = '${plan}_${const Uuid().v4()}';
+
+      final result = await _paystackService.initializePayment(
+        email: email,
+        amountInCents: amount,
+        plan: plan,
+        reference: reference,
+      );
+
+      _isProcessingPayment = false;
+
+      if (result['success'] == true) {
+        return {
+          'success': true,
+          'access_code': result['access_code'],
+          'authorization_url': result['authorization_url'],
+          'reference': result['reference'],
+        };
+      } else {
+        _paymentError = result['message'] ?? 'Failed to initialize payment';
+        notifyListeners();
+        return {
+          'success': false,
+          'message': _paymentError,
+        };
+      }
+    } catch (e) {
+      _paymentError = 'Error: $e';
+      _isProcessingPayment = false;
+      notifyListeners();
+      return {
+        'success': false,
+        'message': _paymentError,
+      };
+    }
+  }
+
+  /// Verify Paystack payment transaction
+  Future<bool> verifyPaystackPayment({
+    required String reference,
+    required String plan,
+  }) async {
+    try {
+      final result = await _paystackService.verifyPayment(reference: reference);
+
+      if (result['success'] == true && result['status'] == 'success') {
+        // Payment successful, update subscription
+        await setSubscriptionPlan(plan);
+        _paymentError = '';
+        notifyListeners();
+        return true;
+      } else {
+        _paymentError = result['message'] ?? 'Payment verification failed';
+        notifyListeners();
+        return false;
+      }
+    } catch (e) {
+      _paymentError = 'Verification error: $e';
+      notifyListeners();
+      return false;
+    }
+  }
+
+  /// Get Paystack public key
+  String getPaystackPublicKey() {
+    return _paystackService.getPublicKey();
+  }
+
+  /// Clear payment error
+  void clearPaymentError() {
+    _paymentError = '';
     notifyListeners();
   }
 }

@@ -343,8 +343,8 @@ class DashboardScreen extends StatelessWidget {
       title,
       style: TextStyle(
         color: Theme.of(context).brightness == Brightness.dark ? Colors.white : AppColors.textDark,
-        fontSize: 20,
-        fontWeight: FontWeight.w700,
+        fontSize: 18,
+        fontWeight: FontWeight.w600,
       ),
     );
   }
@@ -354,28 +354,28 @@ class DashboardScreen extends StatelessWidget {
       const _FeatureCard(
         icon: Icons.auto_awesome_rounded,
         title: 'Content\nGenerator',
-        subtitle: 'Social posts & ads',
+        subtitle: 'Create posts & ads',
         gradient: AppColors.contentGradient,
         route: 1,
       ),
       const _FeatureCard(
         icon: Icons.chat_bubble_rounded,
         title: 'Chat\nAssistant',
-        subtitle: 'Customer replies',
+        subtitle: 'Auto replies',
         gradient: AppColors.chatGradient,
         route: 2,
       ),
       const _FeatureCard(
         icon: Icons.receipt_long_rounded,
         title: 'Invoice\nGenerator',
-        subtitle: 'Bills & receipts',
+        subtitle: 'Bills & quotes',
         gradient: AppColors.invoiceGradient,
         route: 3,
       ),
       const _FeatureCard(
         icon: Icons.insights_rounded,
-        title: 'Smart\nInsights',
-        subtitle: 'Growth tips',
+        title: 'Insights',
+        subtitle: 'Tips & analytics',
         gradient: AppColors.insightsGradient,
         route: 4,
       ),
@@ -386,9 +386,9 @@ class DashboardScreen extends StatelessWidget {
       physics: const NeverScrollableScrollPhysics(),
       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: 2,
-        crossAxisSpacing: 14,
-        mainAxisSpacing: 14,
-        childAspectRatio: 1.1,
+        crossAxisSpacing: 12,
+        mainAxisSpacing: 12,
+        childAspectRatio: 1.05,
       ),
       itemCount: features.length,
       itemBuilder: (context, i) {
@@ -398,25 +398,18 @@ class DashboardScreen extends StatelessWidget {
   }
 
   Widget _buildFeatureTile(BuildContext context, _FeatureCard card, int index) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return GestureDetector(
         // Navigate by switching the global tab index
         onTap: () => context.read<AppProvider>().setTabIndex(card.route),
 
       child: Container(
         decoration: BoxDecoration(
-          gradient: LinearGradient(
-            colors: card.gradient,
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
+          color: isDark ? AppColors.darkCard : AppColors.lightCard,
+          border: Border.all(
+            color: isDark ? AppColors.darkBorder : AppColors.lightBorder,
           ),
-          borderRadius: BorderRadius.circular(20),
-          boxShadow: [
-            BoxShadow(
-              color: card.gradient.first.withValues(alpha: 0.3),
-              blurRadius: 16,
-              offset: const Offset(0, 6),
-            ),
-          ],
+          borderRadius: BorderRadius.circular(16),
         ),
         child: Padding(
           padding: const EdgeInsets.all(18),
@@ -427,29 +420,29 @@ class DashboardScreen extends StatelessWidget {
               Container(
                 padding: const EdgeInsets.all(10),
                 decoration: BoxDecoration(
-                  color: Colors.white.withValues(alpha: 0.2),
+                  color: card.gradient.first.withValues(alpha: 0.15),
                   borderRadius: BorderRadius.circular(12),
                 ),
-                child: Icon(card.icon, color: Colors.white, size: 26),
+                child: Icon(card.icon, color: card.gradient.first, size: 24),
               ),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
                     card.title,
-                    style: const TextStyle(
-                      color: Colors.white,
-                      fontSize: 15,
-                      fontWeight: FontWeight.w700,
+                    style: TextStyle(
+                      color: isDark ? Colors.white : AppColors.textDark,
+                      fontSize: 14,
+                      fontWeight: FontWeight.w600,
                       height: 1.2,
                     ),
                   ),
-                  const SizedBox(height: 2),
+                  const SizedBox(height: 4),
                   Text(
                     card.subtitle,
                     style: TextStyle(
-                      color: Colors.white.withValues(alpha: 0.75),
-                      fontSize: 12,
+                      color: isDark ? AppColors.textMuted : AppColors.textSecondary,
+                      fontSize: 11,
                     ),
                   ),
                 ],
