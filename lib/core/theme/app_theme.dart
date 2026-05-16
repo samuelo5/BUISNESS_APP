@@ -194,5 +194,13 @@ class AppTheme {
         ),
       ),
     ),
+    bottomNavigationBarTheme: const BottomNavigationBarThemeData(
+      backgroundColor: AppColors.lightSurface,
+      selectedItemColor: AppColors.primary,
+      unselectedItemColor: AppColors.textMuted,
+      showUnselectedLabels: true,
+      type: BottomNavigationBarType.fixed,
+      elevation: 0,
+    ),
   );
 }
