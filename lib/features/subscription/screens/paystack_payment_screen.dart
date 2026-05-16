@@ -145,7 +145,7 @@ class _PaystackPaymentScreenState extends State<PaystackPaymentScreen> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Icon(Icons.error_outline, color: AppColors.error, size: 64),
+              const Icon(Icons.error_outline, color: AppColors.error, size: 64),
               const SizedBox(height: 16),
               Text(
                 _errorMessage,

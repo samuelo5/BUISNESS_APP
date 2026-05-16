@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_animate/flutter_animate.dart';
 import 'package:provider/provider.dart';
 import 'package:business_assistant/core/theme/app_theme.dart';
 import 'package:business_assistant/providers/app_provider.dart';
@@ -103,7 +102,7 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
                     const SizedBox(height: 32),
                     _buildCTAButton(context),
                     const SizedBox(height: 16),
-                    _buildAllPlansComparison(),
+                    _buildAllPlansComparison(context),
                     const SizedBox(height: 40),
                   ],
                 ),
@@ -116,6 +115,7 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
   }
 
   Widget _buildHeader(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -132,17 +132,20 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
             Text(
               'Pricing Plans',
               style: TextStyle(
-                  color: Theme.of(context).brightness == Brightness.dark ? Colors.white : AppColors.textDark,
+                  color: isDark ? Colors.white : AppColors.textDark,
                   fontSize: 24,
                   fontWeight: FontWeight.w700),
             ),
           ],
         ),
         const SizedBox(height: 8),
-        const Text(
+        Text(
           'Choose the perfect plan for your business',
-          style:
-              TextStyle(color: AppColors.textSecondary, fontSize: 14, height: 1.5),
+          style: TextStyle(
+            color: isDark ? AppColors.textSecondary : AppColors.textDark,
+            fontSize: 14,
+            height: 1.5,
+          ),
         ),
       ],
     );
@@ -181,7 +184,7 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
                         style: TextStyle(
                           color: selected 
                               ? Colors.white
-                              : AppColors.textMuted,
+                              : (Theme.of(context).brightness == Brightness.dark ? AppColors.textMuted : AppColors.textDark),
                           fontWeight: FontWeight.w600,
                           fontSize: 13,
                         ),
@@ -193,7 +196,7 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
                         style: TextStyle(
                           color: selected
                               ? Colors.white.withValues(alpha: 0.85)
-                              : AppColors.textMuted,
+                              : (Theme.of(context).brightness == Brightness.dark ? AppColors.textMuted : AppColors.textDark),
                           fontSize: 11,
                           fontWeight: FontWeight.w500,
                         ),
@@ -301,9 +304,9 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
         ...plan.features.map((f) => _featureRow(context, f, true, plan.color)),
         if (plan.locked.isNotEmpty) ...[
           const SizedBox(height: 16),
-          const Text('Not included',
+          Text('Not included',
               style: TextStyle(
-                  color: AppColors.textMuted,
+                  color: isDark ? AppColors.textMuted : AppColors.textDark,
                   fontSize: 14,
                   fontWeight: FontWeight.w600)),
           const SizedBox(height: 10),
@@ -341,7 +344,7 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
             style: TextStyle(
               color: included 
                    ? (isDark ? Colors.white : AppColors.textDark)
-                   : AppColors.textMuted,
+                   : (isDark ? AppColors.textMuted : AppColors.textDark.withValues(alpha: 0.6)),
               fontSize: 14,
             ),
           ),
@@ -466,7 +469,7 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
                       content: Text(
-                        '🎉 Welcome to ${planName}! Enjoy unlimited access.',
+                        '🎉 Welcome to $planName! Enjoy unlimited access.',
                       ),
                       backgroundColor: AppColors.success,
                       behavior: SnackBarBehavior.floating,
@@ -485,13 +488,18 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
     );
   }
 
-  Widget _buildAllPlansComparison() {
-    return const Column(
+  Widget _buildAllPlansComparison(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    return Column(
       children: [
         Text(
           '✓ Cancel anytime  •  ✓ 7-day free trial  •  ✓ Secure payment',
           textAlign: TextAlign.center,
-          style: TextStyle(color: AppColors.textMuted, fontSize: 12, height: 1.8),
+          style: TextStyle(
+            color: isDark ? AppColors.textMuted : AppColors.textDark.withValues(alpha: 0.7),
+            fontSize: 12,
+            height: 1.8,
+          ),
         ),
       ],
     );
