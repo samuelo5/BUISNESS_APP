@@ -1,3 +1,8 @@
+<img width="413" height="911" alt="Screenshot 2026-05-16 162321" src="https://github.com/user-attachments/assets/f91fb8fa-0456-4342-93da-346fb16e2fc2" />
+<img width="405" height="915" alt="Screenshot 2026-05-16 162302" src="https://github.com/user-attachments/assets/deb91182-181f-4f23-bb46-2b42cd757901" />
+<img width="408" height="918" alt="Screenshot 2026-05-16 162241" src="https://github.com/user-attachments/assets/cc869514-4250-48c5-af05-44576eca0c52" />
+<img width="413" height="917" alt="Screenshot 2026-05-16 162216" src="https://github.com/user-attachments/assets/78fe978a-4856-4075-a62c-fa9de7b1625c" />
+<img width="409" height="912" alt="Screenshot 2026-05-16 162154" src="https://github.com/user-attachments/assets/0dfa8978-f9f9-4961-b9ae-fd5684999c93" />
 # BizAI Assistant
 
 A polished Flutter business assistant app designed for small businesses and entrepreneurs.
